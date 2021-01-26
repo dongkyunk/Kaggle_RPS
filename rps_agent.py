@@ -24,7 +24,7 @@ class DecisionTreeModel(Model):
         self.min_samples = 30
         self.score = 0
 
-    def train(self, my_actions, op_actions, reward):
+    def train(self, my_actions, op_actions, reward, step):
         if len(my_actions) < 30:
             self.tactic = random.randint(0, 2)
         else:
@@ -59,44 +59,96 @@ class DecisionTreeModel(Model):
                 self.tactic = random.randint(0, 2)
 
     def action(self):
-        # print(self.score)    
+        # print(self.score)
         return self.tactic
+
 
 class YapSapModel(Model):
     def __init__(self, frequency=15):
+        self.strategy = "YapSap"
         self.init_frequency = frequency
         self.frequency = frequency
-        self.curr_freq = 0
+        self.iteration = 0
         self.tactic = 0
         self.model = DecisionTreeModel()
-        
-    def _frequency_updater(self, reward):
-        if reward <= -20:
-            self.frequency = self.init_frequency - random.randint(8, 12)
+        self.reward_lst = list()
+
+    def _get_zone(self, reward):
+        if reward <= -25:
+            return "Severe"
+        if reward <= -15:
+            return "Very Dangerous"
         elif reward <= -10:
-            self.frequency = self.init_frequency - random.randint(3, 7)
+            return "Dangerous"
+        elif reward <= 10:
+            return "Ok"
+        elif reward <= 20:
+            return "Try Harder"
+        elif reward < 25:
+            return "Almost There"
+        elif reward <= 30:
+            return "Pretty Good"
         else:
+            return "Relax"
+
+    def _update_frequency(self, reward, step):
+        zone = self._get_zone(reward)
+        print(zone)
+        if zone in ["Severe", "Almost There"]:
+            self.frequency = self.init_frequency - random.randint(10, 12)
+        elif zone in ["Very Dangerous", "Dangerous", "Try Harder"]:
+            self.frequency = self.init_frequency - random.randint(4, 6)
+        elif zone == "Ok":
             self.frequency = self.init_frequency
+        elif zone == "Pretty Good":
+            self.frequency = self.init_frequency + random.randint(4, 6)
 
-    def train(self, my_actions, op_actions, reward):
-        # Update current freq
-        self.curr_freq = self.curr_freq + 1
-        
-        if self.curr_freq == self.frequency:
-            self._frequency_updater(reward)
-            # Train submodel
-            self.model.train(my_actions, op_actions, reward)
+    def _update_strategy(self, reward, step):
+        self.reward_lst.append(reward)
+        if len(self.reward_lst) > self.frequency:
+            self.reward_lst = self.reward_lst[-self.frequency:]
+
+        zone = self._get_zone(reward)
+        if zone in ["Relax"]:
+            self.strategy = "Random"
+            return
+
+        # Switch Strategies when keep losing
+        if len(self.reward_lst) == self.frequency:
+            decreasing = (
+                self.reward_lst[self.frequency-1] - self.reward_lst[0]) < 0
+            if decreasing and zone in ["Severe", "Very Dangerous"] and step < 800:
+                if self.strategy == "Random":
+                    self.strategy = "YapSap"
+                else:
+                    self.strategy = "Random"
+                self.reward_lst = list()
+                return
+            if zone not in ["Severe", "Very Dangerous"]:
+                self.strategy = "YapSap"
+
+    def train(self, my_actions, op_actions, reward, step):
+        self._update_strategy(reward, step)
+
+        self.tactic = random.randint(0, 2)
+
+        if self.strategy == "Random":
+            return
+
+        # Update iteration
+        self.iteration = self.iteration + 1
+
+        if self.iteration >= self.frequency:
+            # Train and predict
+            self.model.train(my_actions, op_actions, reward, step)
             self.tactic = self.model.action()
-            self.curr_freq = 0
-        else:
-            self.tactic = random.randint(0, 2)
-
-        # print("self.curr_freq:", self.curr_freq)
+            # Update values
+            self.iteration = 0
+            self._update_frequency(reward, step)
 
     def action(self):
-        return self.tactic
-
-    def action(self):
+        print("Iteration: {}, Strategy: {}, Frequency: {}".format(
+            self.iteration, self.strategy, self.frequency))
         return self.tactic
 
 
@@ -138,10 +190,10 @@ def rps_agent(observation, configuration):
 
     # Update Info
     op_actions = np.append(op_actions, observation.lastOpponentAction)
-    update_score(reward, my_actions, op_actions)
+    reward = update_score(reward, my_actions, op_actions)
 
     # Train Model
-    model.train(my_actions, op_actions, reward)
+    model.train(my_actions, op_actions, reward, observation.step)
 
     # Make Prediction
     my_action = model.action()

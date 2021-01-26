@@ -52,6 +52,8 @@ class MockBattler():
             action1, action2 = num_to_rps[action1], num_to_rps[action2]
             player1_reward_lst.append(self.observation1.reward)
             # print("agent1 : {} / agent2 : {}".format(action1, action2))
+            print("agent1 reward: {} / agent2 reward: {}".format(
+                self.observation1.reward, self.observation2.reward))
         print("agent1 reward: {} / agent2 reward: {}".format(
             self.observation1.reward, self.observation2.reward))
 
@@ -60,5 +62,5 @@ class MockBattler():
         plt.show()
 
 
-mb = MockBattler(rps_agent, sparring_rps_agent)
+mb = MockBattler(rps_agent, sparring_partner.transition_agent)
 mb.run()
