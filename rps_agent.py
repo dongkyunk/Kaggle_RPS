@@ -19,57 +19,61 @@ class Model():
 
 
 class DecisionTreeModel(Model):
-    def __init__(self, frequency=10):
+    def __init__(self, frequency=10, rolling_window_size=5):
         self.tactic = 0
-        self.min_samples = 30
+        self.min_samples = 40
         self.score = 0
+        self.rolling_window_size = rolling_window_size
 
     def train(self, my_actions, op_actions, reward, step):
-        if len(my_actions) < 30:
+        if len(my_actions) < self.min_samples:
             self.tactic = random.randint(0, 2)
         else:
-            onehot_my_act = np.zeros([len(my_actions), 3])
-            onehot_op_act = np.zeros([len(my_actions), 3])
+            # Make One hot encoding
+            onehot_my_acts = np.zeros([len(my_actions), 3])
+            onehot_op_acts = np.zeros([len(my_actions), 3])
             for i in range(len(my_actions)):
-                onehot_my_act[i][my_actions[i]] = 1
-                onehot_op_act[i][op_actions[i]] = 1
+                onehot_my_acts[i][my_actions[i]] = 1
+                onehot_op_acts[i][op_actions[i]] = 1
 
-            # Make training data
-            X_train = np.hstack([onehot_my_act[:-1], onehot_op_act[:-1]])
-            y_train = np.roll(onehot_op_act, -1)[:-1]
+            # Rolling window
+            X_train = np.hstack([onehot_my_acts, onehot_op_acts])
+            for i in range(1, self.rolling_window_size+1):
+                X_train = np.hstack((X_train, np.roll(X_train, i, axis=0)))
+
+            # Prepare data
+            curr = X_train[-1]
+            X_train = np.roll(X_train, 1, axis=0)
+            y_train = onehot_op_acts
 
             # Set the history period. Long chains here will need a lot of time
-            if len(X_train) > 25:
-                random_window_size = 10 + random.randint(0, 10)
-                X_test = X_train[-2*random_window_size:]
-                y_test = y_train[-2*random_window_size:]
-                X_train = X_train[-random_window_size:]
-                y_train = y_train[-random_window_size:]
+            random_window_size = 10 + random.randint(0, 10)
+            X_test = X_train[-2*random_window_size:]
+            y_test = y_train[-2*random_window_size:]
+            X_train = X_train[-random_window_size:]
+            y_train = y_train[-random_window_size:]
 
             # Train a classifier model
-            model = RandomForestClassifier(n_estimators=25)
+            model = RandomForestClassifier()
             model.fit(X_train, y_train)
 
-            # Calculate Score
+            # Calculate accuracy
             y_pred = model.predict(X_test)
             self.score = accuracy_score(y_test, y_pred)
 
             # Use prediction if accuracy high
             if self.score >= 0.5:
-                curr = np.zeros(6)
-                curr[my_actions[-1]] = 1
-                curr[op_actions[-1] + 3] = 1                
                 prediction = model.predict(curr.reshape(1, -1))
-                prediction_proba = model.predict_proba(curr.reshape(1, -1))
-                prediction = [1-prediction_proba[i][0][0] for i in range(3)]
-                r, p, s = prediction[0], prediction[1], prediction[2]
-                self.tactic = int(np.argmax(np.array({s-p, r-s, p-r})))
-                # self.tactic = int((prediction + 1) % 3)
+                if 1 in prediction[0].tolist():
+                    prediction_proba = model.predict_proba(curr.reshape(1, -1))
+                    prediction = [1-prediction_proba[i][0][0]
+                                  for i in range(3)]
+                    r, p, s = prediction[0], prediction[1], prediction[2]
+                    self.tactic = int(np.argmax(np.array([s-p, r-s, p-r])))
             else:
                 self.tactic = random.randint(0, 2)
 
     def action(self):
-        # print(self.score)
         return self.tactic
 
 
@@ -101,13 +105,13 @@ class TransitionMatrix():
 
 
 class YapSapModel(Model):
-    def __init__(self, frequency=10):
-        self.strategy = "TM"
+    def __init__(self, frequency=5):
+        self.strategy = "DT"
         self.init_frequency = frequency
         self.frequency = frequency
         self.iteration = 0
         self.tactic = 0
-        self.model = TransitionMatrix()
+        self.model = DecisionTreeModel()
         self.prev_reward, self.curr_reward = 0, 0
         self.strategy_score = {"TM": [], "DT": []}
 
@@ -133,36 +137,43 @@ class YapSapModel(Model):
         zone = self._get_zone(reward)
         print(zone)
         if zone in ["Severe", "Almost There"]:
-            self.frequency = self.init_frequency - random.randint(6, 9)
+            self.frequency = self.init_frequency - random.randint(3, 5)
         elif zone in ["Very Dangerous", "Dangerous", "Try Harder"]:
-            self.frequency = self.init_frequency - random.randint(2, 5)
+            self.frequency = self.init_frequency - random.randint(1, 3)
         elif zone in ["Ok"]:
             self.frequency = self.init_frequency
         elif zone in ["Pretty Good", "Relax"]:
-            self.frequency = self.init_frequency + random.randint(6, 9)
+            self.frequency = self.init_frequency + random.randint(3, 5)
 
-    def _update_strategy(self, reward, step, decreasing):
-        zone = self._get_zone(reward)
-        if decreasing and sum(self.strategy_score[self.strategy]) < 0:
+    def _update_strategy(self, reward, step):
+        if len(self.strategy_score[self.strategy]) < 5:
+            return
+        good_strategy = sum(self.strategy_score[self.strategy][-5:]) > 1
+        bad_strategy = sum(self.strategy_score[self.strategy][-5:]) < -1
+        print(sum(self.strategy_score[self.strategy][-5:]))
+
+        # Switch strategy
+        if bad_strategy:
             if self.strategy == "DT":
                 self.strategy = "TM"
                 self.model = TransitionMatrix()
             elif self.strategy == "TM":
                 self.strategy = "DT"
                 self.model = DecisionTreeModel()
+        # More aggressive
+        if good_strategy:
+            self.frequency = self.init_frequency - random.randint(3, 5)
 
     def train(self, my_actions, op_actions, reward, step):
-        import random 
+        import random
         random = random.SystemRandom()
 
+        # Update strategy after every freq over
         if self.iteration == 0:
             self.curr_reward = reward
-            decreasing = (self.curr_reward - self.prev_reward) < 0
             self.strategy_score[self.strategy].append(
                 self.curr_reward - self.prev_reward)
-            # print(decreasing)
-            self.prev_reward = reward
-            self._update_strategy(reward, step, decreasing)
+            self._update_strategy(reward, step)
 
         # Update iteration
         self.iteration = self.iteration + 1
@@ -177,6 +188,7 @@ class YapSapModel(Model):
             # Update values
             self._update_frequency(reward, step)
             self.iteration = 0
+            self.prev_reward = reward
         else:
             self.tactic = random.randint(0, 2)
 

@@ -1,6 +1,6 @@
-from sparring_rps_agent import sparring_rps_agent
 from rps_agent import rps_agent
-import sparring_partner
+import sparring_partner.white_belt.mirror_shift_1 as mirror_shift
+import test_partner
 import matplotlib.pyplot as plt 
 from ryan import agent
 
@@ -52,7 +52,7 @@ class MockBattler():
             self.observation2.set_reward(action2, action1)
             action1, action2 = num_to_rps[action1], num_to_rps[action2]
             player1_reward_lst.append(self.observation1.reward)
-            # print("agent1 : {} / agent2 : {}".format(action1, action2))
+            print("agent1 : {} / agent2 : {}".format(action1, action2))
             print("agent1 reward: {} / agent2 reward: {}".format(
                 self.observation1.reward, self.observation2.reward))
         print("agent1 reward: {} / agent2 reward: {}".format(
@@ -63,5 +63,5 @@ class MockBattler():
         plt.savefig('mock_battle.png', dpi=300)
 
 #rps_agent
-mb = MockBattler(rps_agent, sparring_partner.geometric_agent)
+mb = MockBattler(rps_agent, mirror_shift.mirror_shift_opponent_agent_1)
 mb.run()
