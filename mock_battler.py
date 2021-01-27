@@ -2,6 +2,7 @@ from sparring_rps_agent import sparring_rps_agent
 from rps_agent import rps_agent
 import sparring_partner
 import matplotlib.pyplot as plt 
+from ryan import agent
 
 class Observation():
     def __init__(self):
@@ -59,8 +60,8 @@ class MockBattler():
 
         plt.plot(player1_reward_lst)
         plt.ylabel('reward')
-        plt.show()
+        plt.savefig('mock_battle.png', dpi=300)
 
-
-mb = MockBattler(rps_agent, sparring_partner.transition_agent)
+#rps_agent
+mb = MockBattler(rps_agent, sparring_partner.geometric_agent)
 mb.run()

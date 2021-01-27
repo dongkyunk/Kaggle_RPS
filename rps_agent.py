@@ -19,7 +19,7 @@ class Model():
 
 
 class DecisionTreeModel(Model):
-    def __init__(self, frequency=15):
+    def __init__(self, frequency=10):
         self.tactic = 0
         self.min_samples = 30
         self.score = 0
@@ -28,9 +28,15 @@ class DecisionTreeModel(Model):
         if len(my_actions) < 30:
             self.tactic = random.randint(0, 2)
         else:
+            onehot_my_act = np.zeros([len(my_actions), 3])
+            onehot_op_act = np.zeros([len(my_actions), 3])
+            for i in range(len(my_actions)):
+                onehot_my_act[i][my_actions[i]] = 1
+                onehot_op_act[i][op_actions[i]] = 1
+
             # Make training data
-            X_train = np.vstack([my_actions[:-1], op_actions[:-1]]).T
-            y_train = np.roll(op_actions, -1)[:-1].T
+            X_train = np.hstack([onehot_my_act[:-1], onehot_op_act[:-1]])
+            y_train = np.roll(onehot_op_act, -1)[:-1]
 
             # Set the history period. Long chains here will need a lot of time
             if len(X_train) > 25:
@@ -50,11 +56,15 @@ class DecisionTreeModel(Model):
 
             # Use prediction if accuracy high
             if self.score >= 0.5:
-                curr = np.empty((0, 0), dtype=int)
-                curr = np.append(curr, [my_actions[-1], op_actions[-1]])
+                curr = np.zeros(6)
+                curr[my_actions[-1]] = 1
+                curr[op_actions[-1] + 3] = 1                
                 prediction = model.predict(curr.reshape(1, -1))
-                # print("prediction:", prediction)
-                self.tactic = int((prediction + 1) % 3)
+                prediction_proba = model.predict_proba(curr.reshape(1, -1))
+                prediction = [1-prediction_proba[i][0][0] for i in range(3)]
+                r, p, s = prediction[0], prediction[1], prediction[2]
+                self.tactic = int(np.argmax(np.array({s-p, r-s, p-r})))
+                # self.tactic = int((prediction + 1) % 3)
             else:
                 self.tactic = random.randint(0, 2)
 
@@ -63,15 +73,43 @@ class DecisionTreeModel(Model):
         return self.tactic
 
 
+class TransitionMatrix():
+    def __init__(self):
+        self.tactic = 0
+        self.T = np.zeros((3, 3))
+        self.P = np.zeros((3, 3))
+        self.a1, self.a2 = None, None
+
+    def train(self, my_actions, op_actions, reward, step):
+        self.a1 = op_actions[-1]
+        self.T[self.a2, self.a1] += 1
+        self.P = np.divide(self.T, np.maximum(
+            1, self.T.sum(axis=1)).reshape(-1, 1))
+        self.a2 = self.a1
+        self.tactic = int(np.random.randint(3))
+        if np.sum(self.P[self.a1, :]) == 1:
+            # prediction = self.P[self.a1, :]
+            # r, p, s = prediction[0], prediction[1], prediction[2]
+            # self.tactic = int(np.argmax(np.array({s-p, r-s, p-r})))
+            self.tactic = int((np.random.choice(
+                [0, 1, 2],
+                p=self.P[self.a1, :]
+            ) + 1) % 3)
+
+    def action(self):
+        return self.tactic
+
+
 class YapSapModel(Model):
-    def __init__(self, frequency=15):
-        self.strategy = "YapSap"
+    def __init__(self, frequency=10):
+        self.strategy = "TM"
         self.init_frequency = frequency
         self.frequency = frequency
         self.iteration = 0
         self.tactic = 0
-        self.model = DecisionTreeModel()
-        self.reward_lst = list()
+        self.model = TransitionMatrix()
+        self.prev_reward, self.curr_reward = 0, 0
+        self.strategy_score = {"TM": [], "DT": []}
 
     def _get_zone(self, reward):
         if reward <= -25:
@@ -82,9 +120,9 @@ class YapSapModel(Model):
             return "Dangerous"
         elif reward <= 10:
             return "Ok"
-        elif reward <= 20:
+        elif reward <= 15:
             return "Try Harder"
-        elif reward < 25:
+        elif reward < 23:
             return "Almost There"
         elif reward <= 30:
             return "Pretty Good"
@@ -95,56 +133,52 @@ class YapSapModel(Model):
         zone = self._get_zone(reward)
         print(zone)
         if zone in ["Severe", "Almost There"]:
-            self.frequency = self.init_frequency - random.randint(10, 12)
+            self.frequency = self.init_frequency - random.randint(6, 9)
         elif zone in ["Very Dangerous", "Dangerous", "Try Harder"]:
-            self.frequency = self.init_frequency - random.randint(4, 6)
-        elif zone == "Ok":
+            self.frequency = self.init_frequency - random.randint(2, 5)
+        elif zone in ["Ok"]:
             self.frequency = self.init_frequency
-        elif zone == "Pretty Good":
-            self.frequency = self.init_frequency + random.randint(4, 6)
+        elif zone in ["Pretty Good", "Relax"]:
+            self.frequency = self.init_frequency + random.randint(6, 9)
 
-    def _update_strategy(self, reward, step):
-        self.reward_lst.append(reward)
-        if len(self.reward_lst) > self.frequency:
-            self.reward_lst = self.reward_lst[-self.frequency:]
-
+    def _update_strategy(self, reward, step, decreasing):
         zone = self._get_zone(reward)
-        if zone in ["Relax"]:
-            self.strategy = "Random"
-            return
-
-        # Switch Strategies when keep losing
-        if len(self.reward_lst) == self.frequency:
-            decreasing = (
-                self.reward_lst[self.frequency-1] - self.reward_lst[0]) < 0
-            if decreasing and zone in ["Severe", "Very Dangerous"] and step < 800:
-                if self.strategy == "Random":
-                    self.strategy = "YapSap"
-                else:
-                    self.strategy = "Random"
-                self.reward_lst = list()
-                return
-            if zone not in ["Severe", "Very Dangerous"]:
-                self.strategy = "YapSap"
+        if decreasing and sum(self.strategy_score[self.strategy]) < 0:
+            if self.strategy == "DT":
+                self.strategy = "TM"
+                self.model = TransitionMatrix()
+            elif self.strategy == "TM":
+                self.strategy = "DT"
+                self.model = DecisionTreeModel()
 
     def train(self, my_actions, op_actions, reward, step):
-        self._update_strategy(reward, step)
+        import random 
+        random = random.SystemRandom()
 
-        self.tactic = random.randint(0, 2)
-
-        if self.strategy == "Random":
-            return
+        if self.iteration == 0:
+            self.curr_reward = reward
+            decreasing = (self.curr_reward - self.prev_reward) < 0
+            self.strategy_score[self.strategy].append(
+                self.curr_reward - self.prev_reward)
+            # print(decreasing)
+            self.prev_reward = reward
+            self._update_strategy(reward, step, decreasing)
 
         # Update iteration
         self.iteration = self.iteration + 1
+        if self.strategy == "TM":
+            self.model.train(my_actions, op_actions, reward, step)
 
         if self.iteration >= self.frequency:
             # Train and predict
-            self.model.train(my_actions, op_actions, reward, step)
+            if self.strategy == "DT":
+                self.model.train(my_actions, op_actions, reward, step)
             self.tactic = self.model.action()
             # Update values
-            self.iteration = 0
             self._update_frequency(reward, step)
+            self.iteration = 0
+        else:
+            self.tactic = random.randint(0, 2)
 
     def action(self):
         print("Iteration: {}, Strategy: {}, Frequency: {}".format(
