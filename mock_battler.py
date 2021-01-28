@@ -2,10 +2,11 @@ from rps_agent import rps_agent
 import sparring_partner.white_belt.mirror_shift_1 as mirror_shift
 import sparring_partner.white_belt.counter_reactionary as counter_reactionary
 import sparring_partner.blue_belt.transition_matrix as transition_matrix
+import sparring_partner.black_belt.greenberg as greenberg
 import sparring_partner.black_belt.iocane_powder as iocane_powder
 import test_partner
 import matplotlib.pyplot as plt
-
+import ryan
 
 class Observation():
     def __init__(self):
@@ -72,7 +73,7 @@ class MockBattler():
 
 
 # #rps_agent
-mb = MockBattler(rps_agent, counter_reactionary.counter_reactionary)
+mb = MockBattler(rps_agent, transition_matrix.transition_agent)
 #counter_reactionary.counter_reactionary
 #transition_matrix.transition_agent
 mb.run()

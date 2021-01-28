@@ -8,6 +8,7 @@ import math
 import secrets
 from xgboost import XGBClassifier
 import pandas as pd
+import time
 
 class Model():
     def __init__(self):
@@ -20,18 +21,21 @@ class Model():
     def action(self):
         return self.tactic
 
+
 class Xgboost(Model):
     def __init__(self):
-        self.numTurnsPredictors = 5 #number of previous turns to use as predictors
-        self.minTrainSetRows = 10 #only start predicting moves after we have enough data
+        self.numTurnsPredictors = 5  # number of previous turns to use as predictors
+        self.minTrainSetRows = 10  # only start predicting moves after we have enough data
         self.myLastMove = None
         self.mySecondLastMove = None
         self.opponentLastMove = None
-        self.numDummies = 2 #how many dummy vars we need to represent a move
-        self.predictors = pd.DataFrame(columns=[str(x) for x in range(self.numTurnsPredictors * 2 * self.numDummies)]).astype("int")
+        self.numDummies = 2  # how many dummy vars we need to represent a move
+        self.predictors = pd.DataFrame(columns=[str(x) for x in range(
+            self.numTurnsPredictors * 2 * self.numDummies)]).astype("int")
         self.opponentsMoves = [0] * 1000
         self.roundHistory = [None] * 1000
-        self.dummies = [[[0,0,0,0], [0,1,0,0], [1,0,0,0]], [[0,0,0,1], [0,1,0,1], [1,0,0,1]], [[0,0,1,0], [0,1,1,0], [1,0,1,0]]]
+        self.dummies = [[[0, 0, 0, 0], [0, 1, 0, 0], [1, 0, 0, 0]], [[0, 0, 0, 1], [
+            0, 1, 0, 1], [1, 0, 0, 1]], [[0, 0, 1, 0], [0, 1, 1, 0], [1, 0, 1, 0]]]
         self.clf = XGBClassifier(n_estimators=10)
 
     def updateFeatures(self, rounds):
@@ -39,7 +43,7 @@ class Xgboost(Model):
 
     def fitAndPredict(self, x, y, newX):
         self.clf.fit(x.values, y)
-        return int(self.clf.predict(np.array(newX).reshape((1,-1)))[0])
+        return int(self.clf.predict(np.array(newX).reshape((1, -1)))[0])
 
     def train(self, my_actions, op_actions, reward, step, configuration):
         T = step
@@ -52,17 +56,22 @@ class Xgboost(Model):
         else:
             self.opponentsMoves[T-2] = A
             if T > self.numTurnsPredictors:
-                self.updateFeatures(self.roundHistory[:T][-self.numTurnsPredictors - 1: -1])
+                self.updateFeatures(
+                    self.roundHistory[:T][-self.numTurnsPredictors - 1: -1])
 
             if len(self.predictors) > self.minTrainSetRows:
-                predictX = sum(self.roundHistory[:T][-self.numTurnsPredictors:], []) #data to predict next move
-                predictedMove = self.fitAndPredict(self.predictors, self.opponentsMoves[:T-1][(self.numTurnsPredictors-1):], predictX)
+                # data to predict next move
+                predictX = sum(
+                    self.roundHistory[:T][-self.numTurnsPredictors:], [])
+                predictedMove = self.fitAndPredict(
+                    self.predictors, self.opponentsMoves[:T-1][(self.numTurnsPredictors-1):], predictX)
                 self.myLastMove = (predictedMove + 1) % S
             else:
                 self.myLastMove = secrets.randbelow(S)
 
     def action(self):
-        return int(self.myLastMove)          
+        return int(self.myLastMove)
+
 
 class PatternAggressive(Model):
     def __init__(self):
@@ -349,11 +358,12 @@ class YapSapModel(Model):
         self.frequency = frequency
         self.iteration = 0
         self.tactic = 0
-        self.prev_reward, self.curr_reward = 0, 0
-        self.strategy_history = {"TM": [], "DT": [], "MP": [], "PA": [], "XG" : []}
-        self.strategy_score = {"TM": [], "DT": [], "MP": [], "PA": [], "XG" : []}
+        self.strategy_history = {
+            "TM": [], "DT": [], "MP": [], "PA": []}
+        self.strategy_score = {"TM": [], "DT": [],
+                               "MP": [], "PA": []}
         self.strategy_models = {"TM": TransitionMatrix(
-        ), "DT": DecisionTreeModel(), "MP": NumpyPatterns(), "PA": PatternAggressive(), "XG" : Xgboost()}
+        ), "DT": DecisionTreeModel(), "MP": NumpyPatterns(), "PA": PatternAggressive()}
 
     def _get_zone(self, reward, step):
         if step < 900:
@@ -393,46 +403,52 @@ class YapSapModel(Model):
 
     def _update_frequency(self, reward, step):
         zone = self._get_zone(reward, step)
-        print(zone)
+        # print(zone)
         if zone in ["Severe", "Almost There"]:
-            self.frequency = self.init_frequency - random.randint(7, 10)
+            self.frequency = self.init_frequency - random.randint(7, 9)
         elif zone in ["Very Dangerous", "Dangerous", "Try Harder"]:
-            self.frequency = self.init_frequency - random.randint(4, 7)
+            self.frequency = self.init_frequency - random.randint(4, 6)
         elif zone in ["Ok"]:
             self.frequency = self.init_frequency
         elif zone in ["Pretty Good", "Relax"]:
-            self.frequency = self.init_frequency + random.randint(7, 10)
+            self.frequency = self.init_frequency + random.randint(7, 9)
 
     @staticmethod
     def _measure_performance(strategy_history, op_actions):
-        reward = 0
+        reward_lst = []
         for i in range(len(strategy_history)):
             winner = int((3 + strategy_history[i] - op_actions[i]) % 3)
             if winner == 1:
                 # Player won last game
-                reward = reward + 1
+                reward_lst.append(1)
             elif winner == 2:
                 # Opponent won last game
-                reward = reward - 1
+                reward_lst.append(-1)
+            else:
+                reward_lst.append(0)
+        reward = np.ma.average(reward_lst, weights=[
+                               1, 1, 1, 1, 1, 2, 2, 2, 2, 2])
+
         return reward
 
     def _update_strategy(self, op_actions, step):
-        if self.strategy is not None and len(self.strategy_history[self.strategy]) < 10:
+        if self.strategy is not None and len(self.strategy_history[self.strategy]) < 15:
             return
         for strategy in self.strategy_history.keys():
-            print(strategy, self.strategy_score[strategy])
             self.strategy_score[strategy] = self._measure_performance(
-                self.strategy_history[strategy][-5:], op_actions[1:][-5:])
+                self.strategy_history[strategy][-10:], op_actions[1:][-10:])
+            # print(strategy, self.strategy_score[strategy])
+            self.strategy_history[strategy] = self.strategy_history[strategy][-10:]
 
         self.strategy = max(self.strategy_score, key=self.strategy_score.get)
 
         if self.strategy is not None:
-            if self.strategy_score[self.strategy] < 1 and step < 800:
+            if self.strategy_score[self.strategy] < 0.2 and step < 900:
                 self.strategy = None
-            elif self.strategy_score[self.strategy] == 4:
+            elif self.strategy_score[self.strategy] > 0.7:
                 # More aggressive
                 self.frequency = self.init_frequency - random.randint(7, 9)
-            elif self.strategy_score[self.strategy] == 5:
+            elif self.strategy_score[self.strategy] > 0.9:
                 # More aggressive
                 self.frequency = 0
 
@@ -442,6 +458,7 @@ class YapSapModel(Model):
 
         # Update strategy based on history
         self._update_strategy(op_actions, step)
+        self._update_frequency(reward, step)
 
         # Update models and record their predictions
         for strategy in self.strategy_models.keys():
@@ -452,13 +469,13 @@ class YapSapModel(Model):
 
         if self.iteration >= self.frequency:
             if self.strategy is None:
+                self.tactic = random.randint(0, 2)
+                self.iteration = 0
                 return
             # Train and predict
             self.tactic = self.strategy_models[self.strategy].action()
             # Update values
             self.iteration = 0
-            self.prev_reward = reward
-            self._update_frequency(reward, step)
         else:
             self.tactic = random.randint(0, 2)
             self.iteration = self.iteration + 1
