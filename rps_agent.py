@@ -6,7 +6,8 @@ import numpy as np
 from abc import abstractmethod
 import math
 import secrets
-
+from xgboost import XGBClassifier
+import pandas as pd
 
 class Model():
     def __init__(self):
@@ -19,6 +20,49 @@ class Model():
     def action(self):
         return self.tactic
 
+class Xgboost(Model):
+    def __init__(self):
+        self.numTurnsPredictors = 5 #number of previous turns to use as predictors
+        self.minTrainSetRows = 10 #only start predicting moves after we have enough data
+        self.myLastMove = None
+        self.mySecondLastMove = None
+        self.opponentLastMove = None
+        self.numDummies = 2 #how many dummy vars we need to represent a move
+        self.predictors = pd.DataFrame(columns=[str(x) for x in range(self.numTurnsPredictors * 2 * self.numDummies)]).astype("int")
+        self.opponentsMoves = [0] * 1000
+        self.roundHistory = [None] * 1000
+        self.dummies = [[[0,0,0,0], [0,1,0,0], [1,0,0,0]], [[0,0,0,1], [0,1,0,1], [1,0,0,1]], [[0,0,1,0], [0,1,1,0], [1,0,1,0]]]
+        self.clf = XGBClassifier(n_estimators=10)
+
+    def updateFeatures(self, rounds):
+        self.predictors.loc[len(self.predictors)] = sum(rounds, [])
+
+    def fitAndPredict(self, x, y, newX):
+        self.clf.fit(x.values, y)
+        return int(self.clf.predict(np.array(newX).reshape((1,-1)))[0])
+
+    def train(self, my_actions, op_actions, reward, step, configuration):
+        T = step
+        A = op_actions[-1]
+        S = configuration.signs
+        self.myLastMove = A
+        self.roundHistory[T-1] = self.dummies[self.myLastMove][A]
+        if T == 1:
+            self.myLastMove = secrets.randbelow(S)
+        else:
+            self.opponentsMoves[T-2] = A
+            if T > self.numTurnsPredictors:
+                self.updateFeatures(self.roundHistory[:T][-self.numTurnsPredictors - 1: -1])
+
+            if len(self.predictors) > self.minTrainSetRows:
+                predictX = sum(self.roundHistory[:T][-self.numTurnsPredictors:], []) #data to predict next move
+                predictedMove = self.fitAndPredict(self.predictors, self.opponentsMoves[:T-1][(self.numTurnsPredictors-1):], predictX)
+                self.myLastMove = (predictedMove + 1) % S
+            else:
+                self.myLastMove = secrets.randbelow(S)
+
+    def action(self):
+        return int(self.myLastMove)          
 
 class PatternAggressive(Model):
     def __init__(self):
@@ -223,12 +267,15 @@ class DecisionTreeModel(Model):
             self.tactic = random.randint(0, 2)
         else:
             # Make One hot encoding
-            onehot_acts = np.zeros([len(my_actions)-self.rolling_window_size+1, 30])
+            onehot_acts = np.zeros(
+                [len(my_actions)-self.rolling_window_size+1, 30])
             y_train = np.zeros([len(my_actions)-self.rolling_window_size, 3])
             for i in range(self.rolling_window_size, len(my_actions)+1):
                 for j in range(1, self.rolling_window_size+1):
-                    onehot_acts[i-self.rolling_window_size][my_actions[i-j]+self.rolling_window_size+1*(j-1)] = 1
-                    onehot_acts[i-self.rolling_window_size][op_actions[i-j]+self.rolling_window_size+1*(j-1)+3] = 1
+                    onehot_acts[i-self.rolling_window_size][my_actions[i-j] +
+                                                            self.rolling_window_size+1*(j-1)] = 1
+                    onehot_acts[i-self.rolling_window_size][op_actions[i-j] +
+                                                            self.rolling_window_size+1*(j-1)+3] = 1
                 if i != len(my_actions):
                     y_train[i-self.rolling_window_size][op_actions[i]] = 1
             X_train = onehot_acts
@@ -297,46 +344,64 @@ class TransitionMatrix():
 
 class YapSapModel(Model):
     def __init__(self, frequency=10):
-        self.strategy = "PA"
+        self.strategy = "DT"
         self.init_frequency = frequency
         self.frequency = frequency
         self.iteration = 0
         self.tactic = 0
         self.prev_reward, self.curr_reward = 0, 0
-        self.strategy_history = {"TM": [], "DT": [], "MP": [], "PA":[]}
-        self.strategy_score = {"TM": [], "DT": [], "MP": [], "PA":[]}
+        self.strategy_history = {"TM": [], "DT": [], "MP": [], "PA": [], "XG" : []}
+        self.strategy_score = {"TM": [], "DT": [], "MP": [], "PA": [], "XG" : []}
         self.strategy_models = {"TM": TransitionMatrix(
-        ), "DT": DecisionTreeModel(), "MP": NumpyPatterns(), "PA":PatternAggressive()}
+        ), "DT": DecisionTreeModel(), "MP": NumpyPatterns(), "PA": PatternAggressive(), "XG" : Xgboost()}
 
-    def _get_zone(self, reward):
-        if reward <= -20:
-            return "Severe"
-        if reward <= -15:
-            return "Very Dangerous"
-        elif reward <= -10:
-            return "Dangerous"
-        elif reward <= 10:
-            return "Ok"
-        elif reward <= 15:
-            return "Try Harder"
-        elif reward < 20:
-            return "Almost There"
-        elif reward <= 30:
-            return "Pretty Good"
+    def _get_zone(self, reward, step):
+        if step < 900:
+            if reward <= -20:
+                return "Severe"
+            if reward <= -15:
+                return "Very Dangerous"
+            elif reward <= -10:
+                return "Dangerous"
+            elif reward <= 10:
+                return "Ok"
+            elif reward <= 15:
+                return "Try Harder"
+            elif reward < 20:
+                return "Almost There"
+            elif reward <= 30:
+                return "Pretty Good"
+            else:
+                return "Relax"
         else:
-            return "Relax"
+            if reward <= -20:
+                return "Severe"
+            if reward <= -15:
+                return "Very Dangerous"
+            elif reward <= -10:
+                return "Dangerous"
+            elif reward <= 0:
+                return "Try Harder"
+            elif reward <= 15:
+                return "Almost There"
+            elif reward < 20:
+                return "Almost There"
+            elif reward <= 30:
+                return "Pretty Good"
+            else:
+                return "Relax"
 
     def _update_frequency(self, reward, step):
-        zone = self._get_zone(reward)
+        zone = self._get_zone(reward, step)
         print(zone)
         if zone in ["Severe", "Almost There"]:
-            self.frequency = self.init_frequency - random.randint(6, 9)
+            self.frequency = self.init_frequency - random.randint(7, 10)
         elif zone in ["Very Dangerous", "Dangerous", "Try Harder"]:
-            self.frequency = self.init_frequency - random.randint(2, 5)
+            self.frequency = self.init_frequency - random.randint(4, 7)
         elif zone in ["Ok"]:
             self.frequency = self.init_frequency
         elif zone in ["Pretty Good", "Relax"]:
-            self.frequency = self.init_frequency + random.randint(6, 9)
+            self.frequency = self.init_frequency + random.randint(7, 10)
 
     @staticmethod
     def _measure_performance(strategy_history, op_actions):
@@ -352,7 +417,7 @@ class YapSapModel(Model):
         return reward
 
     def _update_strategy(self, op_actions, step):
-        if len(self.strategy_history[self.strategy]) < 5:
+        if self.strategy is not None and len(self.strategy_history[self.strategy]) < 10:
             return
         for strategy in self.strategy_history.keys():
             print(strategy, self.strategy_score[strategy])
@@ -361,11 +426,15 @@ class YapSapModel(Model):
 
         self.strategy = max(self.strategy_score, key=self.strategy_score.get)
 
-        if self.strategy_score[self.strategy] < -2 and step < 800:
-            self.strategy = None
-        # elif self.strategy_score[self.strategy] > 1:
-        #     # More aggressive
-        #     self.frequency=self.init_frequency - random.randint(6, 9)
+        if self.strategy is not None:
+            if self.strategy_score[self.strategy] < 1 and step < 800:
+                self.strategy = None
+            elif self.strategy_score[self.strategy] == 4:
+                # More aggressive
+                self.frequency = self.init_frequency - random.randint(7, 9)
+            elif self.strategy_score[self.strategy] == 5:
+                # More aggressive
+                self.frequency = 0
 
     def train(self, my_actions, op_actions, reward, step, configuration):
         import random
@@ -414,7 +483,7 @@ def update_score(reward, my_actions, op_actions):
 my_actions = np.empty((0, 0), dtype=int)
 op_actions = np.empty((0, 0), dtype=int)
 reward = 0
-model = NumpyPatterns()
+model = YapSapModel()
 
 
 def rps_agent(observation, configuration):
