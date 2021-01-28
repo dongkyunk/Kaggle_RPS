@@ -1,0 +1,11 @@
+,wins,loses,ties,total time,avg. score
+white_belt/mirror_shift_1.py,0,3,7,0:00:14.830558,-14.8
+white_belt/counter_reactionary.py,10,0,0,0:00:14.821653,580.2
+white_belt/all_scissors.py,10,0,0,0:00:14.796142,996.6
+white_belt/all_rock.py,10,0,0,0:00:14.858375,996.7
+white_belt/statistical.py,10,0,0,0:00:14.648575,370.7
+white_belt/mirror.py,1,6,3,0:00:14.677298,-15.1
+white_belt/de_bruijn.py,10,0,0,0:00:00.139590,1.0
+white_belt/all_paper.py,10,0,0,0:00:14.922501,997.7
+white_belt/reactionary.py,2,4,4,0:00:14.828295,-11.3
+white_belt/mirror_shift_2.py,10,0,0,0:00:14.844058,530.5

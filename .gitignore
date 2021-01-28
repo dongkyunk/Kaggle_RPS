@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 .vscode/
 .DS_STORE
-sparring_partner/
+# sparring_partner/
 
 # C extensions
 *.so

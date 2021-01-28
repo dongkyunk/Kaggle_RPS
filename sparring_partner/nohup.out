@@ -1,0 +1,563 @@
+Loading environment football failed: No module named 'gfootball'
+
+  0%|          | 0/10 [00:00<?, ?it/s]
+ 10%|█         | 1/10 [00:00<00:04,  1.97it/s]
+ 20%|██        | 2/10 [00:39<01:36, 12.08s/it]
+ 30%|███       | 3/10 [00:40<01:02,  8.88s/it]
+ 40%|████      | 4/10 [00:43<00:41,  6.96s/it]
+ 50%|█████     | 5/10 [00:53<00:38,  7.79s/it]
+ 60%|██████    | 6/10 [00:56<00:25,  6.39s/it]
+ 70%|███████   | 7/10 [00:58<00:15,  5.06s/it]
+ 80%|████████  | 8/10 [01:03<00:10,  5.01s/it]
+ 90%|█████████ | 9/10 [01:43<00:15, 15.54s/it]
+100%|██████████| 10/10 [09:32<00:00, 151.51s/it]
+100%|██████████| 10/10 [09:32<00:00, 57.21s/it] 
+python3: can't open file 'mock_battler.py': [Errno 2] No such file or directory
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:04,  1.85it/s] 20%|██        | 2/10 [02:16<05:28, 41.08s/it] 30%|███       | 3/10 [02:23<03:35, 30.82s/it] 40%|████      | 4/10 [02:25<02:13, 22.30s/it] 50%|█████     | 5/10 [02:31<01:26, 17.37s/it] 60%|██████    | 6/10 [02:31<00:49, 12.29s/it] 70%|███████   | 7/10 [02:34<00:28,  9.53s/it] 80%|████████  | 8/10 [02:58<00:27, 13.76s/it] 90%|█████████ | 9/10 [04:12<00:31, 31.71s/it]100%|██████████| 10/10 [10:37<00:00, 137.89s/it]100%|██████████| 10/10 [10:37<00:00, 63.78s/it] 
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+                                         wins loses  ...      total time avg. score
+black_belt/centrifugal_bumblepuppy_v4.py    1     4  ...  0:02:31.812980       -9.6
+black_belt/dllu1.py                         2     2  ...  0:02:25.529309        0.4
+black_belt/greenberg.py                     6     1  ...  0:04:12.122377       21.5
+black_belt/iocane_powder.py                 3     0  ...  0:02:58.521708        7.9
+black_belt/multi_armed_bandit_v15.py       10     0  ...  0:00:00.542542          1
+black_belt/memory_patterns_v20.py           4     3  ...  0:02:34.900582          1
+black_belt/IOU2.py                          1     2  ...  0:02:31.381203       -2.4
+black_belt/multi_armed_bandit_v32.py        2     2  ...  0:10:37.775644       -4.1
+black_belt/memory_patterns_v7.py            1     4  ...  0:02:23.098548       -4.5
+black_belt/testing_please_ignore.py         3     3  ...  0:02:16.230233        4.2
+
+[10 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:05,  1.68it/s] 20%|██        | 2/10 [02:24<05:49, 43.63s/it] 30%|███       | 3/10 [02:28<03:41, 31.61s/it] 40%|████      | 4/10 [02:56<03:03, 30.57s/it] 50%|█████     | 5/10 [03:05<02:01, 24.26s/it] 60%|██████    | 6/10 [03:10<01:13, 18.43s/it] 70%|███████   | 7/10 [03:21<00:48, 16.01s/it] 80%|████████  | 8/10 [03:46<00:37, 18.89s/it] 90%|█████████ | 9/10 [04:06<00:19, 19.03s/it]100%|██████████| 10/10 [11:39<00:00, 149.21s/it]100%|██████████| 10/10 [11:39<00:00, 69.90s/it] 
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+                                         wins loses  ...      total time avg. score
+black_belt/centrifugal_bumblepuppy_v4.py    2     3  ...  0:02:56.334820       -3.5
+black_belt/dllu1.py                         5     2  ...  0:02:24.636801       15.4
+black_belt/greenberg.py                     0     4  ...  0:04:06.047892      -41.9
+black_belt/iocane_powder.py                 0     9  ...  0:03:46.679917     -132.4
+black_belt/multi_armed_bandit_v15.py       10     0  ...  0:00:00.600603          1
+black_belt/memory_patterns_v20.py           2     3  ...  0:03:10.705179       -4.5
+black_belt/IOU2.py                          0     6  ...  0:03:21.071626      -22.1
+black_belt/multi_armed_bandit_v32.py        1     4  ...  0:11:39.006782        -14
+black_belt/memory_patterns_v7.py            2     4  ...  0:02:28.197922       -6.3
+black_belt/testing_please_ignore.py         3     3  ...  0:03:05.876917        0.3
+
+[10 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:07,  1.14it/s] 20%|██        | 2/10 [00:45<01:52, 14.12s/it] 30%|███       | 3/10 [00:47<01:12, 10.34s/it] 40%|████      | 4/10 [00:47<00:44,  7.41s/it] 60%|██████    | 6/10 [00:51<00:22,  5.70s/it] 70%|███████   | 7/10 [00:58<00:18,  6.07s/it] 80%|████████  | 8/10 [01:03<00:11,  5.69s/it] 90%|█████████ | 9/10 [01:48<00:17, 17.51s/it]100%|██████████| 10/10 [09:22<00:00, 148.48s/it]100%|██████████| 10/10 [09:22<00:00, 56.23s/it] 
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+                                         wins loses  ...      total time avg. score
+black_belt/centrifugal_bumblepuppy_v4.py    3     1  ...  0:00:51.445661        7.1
+black_belt/dllu1.py                         1     3  ...  0:00:47.418135       -7.3
+black_belt/greenberg.py                     7     0  ...  0:01:48.276236       31.5
+black_belt/iocane_powder.py                 2     3  ...  0:01:03.184077       -6.1
+black_belt/multi_armed_bandit_v15.py       10     0  ...  0:00:00.880585          1
+black_belt/memory_patterns_v20.py           0     2  ...  0:00:58.382339       -5.5
+black_belt/IOU2.py                          0     3  ...  0:00:47.986578       -9.2
+black_belt/multi_armed_bandit_v32.py        0     5  ...  0:09:22.347055      -18.7
+black_belt/memory_patterns_v7.py            4     2  ...  0:00:45.905274        3.7
+black_belt/testing_please_ignore.py         2     3  ...  0:00:48.076188       -0.1
+
+[10 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:07,  1.16it/s] 20%|██        | 2/10 [00:19<00:48,  6.07s/it] 30%|███       | 3/10 [00:20<00:32,  4.60s/it] 40%|████      | 4/10 [00:20<00:19,  3.33s/it] 50%|█████     | 5/10 [00:21<00:12,  2.59s/it] 60%|██████    | 6/10 [00:24<00:10,  2.58s/it] 70%|███████   | 7/10 [00:29<00:10,  3.40s/it] 80%|████████  | 8/10 [00:36<00:08,  4.43s/it] 90%|█████████ | 9/10 [01:20<00:16, 16.52s/it]100%|██████████| 10/10 [08:36<00:00, 142.35s/it]100%|██████████| 10/10 [08:36<00:00, 51.69s/it] 
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+                                         wins loses  ...      total time avg. score
+black_belt/centrifugal_bumblepuppy_v4.py    5     2  ...  0:00:24.050594       12.8
+black_belt/dllu1.py                         1     3  ...  0:00:20.256664      -10.1
+black_belt/greenberg.py                     3     3  ...  0:01:20.931401       -7.3
+black_belt/iocane_powder.py                 1     4  ...  0:00:36.187688      -32.6
+black_belt/multi_armed_bandit_v15.py       10     0  ...  0:00:00.867374          1
+black_belt/memory_patterns_v20.py           2     5  ...  0:00:29.365947      -14.3
+black_belt/IOU2.py                          6     1  ...  0:00:20.609042       11.1
+black_belt/multi_armed_bandit_v32.py        1     4  ...  0:08:36.869445        -11
+black_belt/memory_patterns_v7.py            3     2  ...  0:00:19.068712        2.6
+black_belt/testing_please_ignore.py         2     4  ...  0:00:21.493164        -35
+
+[10 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/29 [00:00<?, ?it/s]  3%|▎         | 1/29 [00:00<00:19,  1.44it/s] 14%|█▍        | 4/29 [00:01<00:08,  3.07it/s]
+1
+1
+1
+1
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 59, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents+blue_belt_agents+black_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/18 [00:00<?, ?it/s]  6%|▌         | 1/18 [00:00<00:11,  1.47it/s] 17%|█▋        | 3/18 [00:00<00:07,  2.00it/s] 17%|█▋        | 3/18 [00:02<00:11,  1.35it/s]
+1
+1
+1
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 59, in <module>
+    df = eval_agent_against_baselines(my_agent, blue_belt_agents+black_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/18 [00:00<?, ?it/s]  6%|▌         | 1/18 [00:00<00:07,  2.17it/s] 11%|█         | 2/18 [00:00<00:06,  2.55it/s] 17%|█▋        | 3/18 [00:00<00:04,  3.21it/s] 22%|██▏       | 4/18 [01:54<08:02, 34.44s/it] 28%|██▊       | 5/18 [02:00<05:34, 25.76s/it] 33%|███▎      | 6/18 [02:09<04:19, 21.65s/it]
+1
+1
+1
+1
+1
+1
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 59, in <module>
+    df = eval_agent_against_baselines(my_agent, blue_belt_agents+black_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.18it/s] 18%|█▊        | 2/11 [01:22<06:12, 41.34s/it]
+1
+1
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 59, in <module>
+    print(df)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.30it/s] 18%|█▊        | 2/11 [00:00<00:03,  2.62it/s] 27%|██▋       | 3/11 [00:17<00:43,  5.42s/it] 36%|███▋      | 4/11 [00:18<00:28,  4.04s/it] 45%|████▌     | 5/11 [00:19<00:17,  2.98s/it] 55%|█████▍    | 6/11 [00:19<00:10,  2.13s/it] 64%|██████▎   | 7/11 [00:22<00:10,  2.51s/it] 73%|███████▎  | 8/11 [00:27<00:09,  3.22s/it] 82%|████████▏ | 9/11 [00:33<00:08,  4.08s/it] 91%|█████████ | 10/11 [01:18<00:16, 16.34s/it]Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.28it/s] 27%|██▋       | 3/11 [00:10<00:14,  1.82s/it] 36%|███▋      | 4/11 [00:16<00:22,  3.19s/it] 45%|████▌     | 5/11 [00:17<00:13,  2.27s/it] 64%|██████▎   | 7/11 [00:17<00:06,  1.60s/it] 73%|███████▎  | 8/11 [00:17<00:03,  1.28s/it] 82%|████████▏ | 9/11 [00:19<00:02,  1.39s/it]100%|██████████| 11/11 [00:19<00:00,  1.00it/s]100%|██████████| 11/11 [00:19<00:00,  1.77s/it]
+                                  wins loses ties      total time avg. score
+white_belt/mirror_shift_1.py        10     0    0  0:00:16.918945       96.5
+white_belt/counter_reactionary.py   10     0    0  0:00:17.028402      189.3
+white_belt/all_scissors.py          10     0    0  0:00:19.379632      434.4
+white_belt/__pycache__              10     0    0  0:00:00.502319          1
+white_belt/all_rock.py              10     0    0  0:00:19.489165      429.6
+white_belt/statistical.py           10     0    0  0:00:17.673251      165.3
+white_belt/mirror.py                10     0    0  0:00:17.095987      102.1
+white_belt/de_bruijn.py             10     0    0  0:00:00.441457          1
+white_belt/all_paper.py             10     0    0  0:00:19.312470      418.9
+white_belt/reactionary.py           10     0    0  0:00:10.524910       58.9
+white_belt/mirror_shift_2.py        10     0    0  0:00:17.145611        104
+100%|██████████| 11/11 [08:47<00:00, 146.13s/it]100%|██████████| 11/11 [08:47<00:00, 47.97s/it] 
+                                         wins loses  ...      total time avg. score
+black_belt/centrifugal_bumblepuppy_v4.py    3     3  ...  0:00:22.732307        1.1
+black_belt/__pycache__                     10     0  ...  0:00:00.437705          1
+black_belt/dllu1.py                         2     2  ...  0:00:18.674251       -0.3
+black_belt/greenberg.py                     6     0  ...  0:01:18.627784       19.9
+black_belt/iocane_powder.py                 2     1  ...  0:00:33.688372        5.8
+black_belt/multi_armed_bandit_v15.py       10     0  ...  0:00:00.695036          1
+black_belt/memory_patterns_v20.py           1     7  ...  0:00:27.599710      -19.2
+black_belt/IOU2.py                          2     2  ...  0:00:19.190056        2.8
+black_belt/multi_armed_bandit_v32.py        1     5  ...  0:08:47.617454      -13.8
+black_belt/memory_patterns_v7.py            4     1  ...  0:00:17.851998        7.7
+black_belt/testing_please_ignore.py         1     3  ...  0:00:19.331608      -10.3
+
+[11 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.30it/s] 18%|█▊        | 2/11 [00:00<00:03,  2.98it/s] 27%|██▋       | 3/11 [01:31<03:41, 27.66s/it] 36%|███▋      | 4/11 [01:53<03:00, 25.80s/it] 45%|████▌     | 5/11 [01:53<01:48, 18.09s/it] 55%|█████▍    | 6/11 [01:53<01:03, 12.70s/it] 73%|███████▎  | 8/11 [01:54<00:26,  8.98s/it] 82%|████████▏ | 9/11 [01:55<00:13,  6.64s/it] 91%|█████████ | 10/11 [01:55<00:04,  4.68s/it]100%|██████████| 11/11 [01:55<00:00,  3.32s/it]100%|██████████| 11/11 [01:55<00:00, 10.52s/it]
+                                  wins loses ties      total time avg. score
+white_belt/mirror_shift_1.py         8     0    2  0:01:53.518694       35.6
+white_belt/counter_reactionary.py    5     0    5  0:01:53.651462       16.2
+white_belt/all_scissors.py          10     0    0  0:01:55.703252       66.1
+white_belt/__pycache__              10     0    0  0:00:00.437639          1
+white_belt/all_rock.py               8     0    2  0:01:55.561088       45.6
+white_belt/statistical.py           10     0    0  0:01:54.271083       51.5
+white_belt/mirror.py                 8     0    2  0:01:53.411625       42.1
+white_belt/de_bruijn.py             10     0    0  0:00:00.541511          1
+white_belt/all_paper.py             10     0    0  0:01:55.451384       48.7
+white_belt/reactionary.py            7     0    3  0:01:31.955896       22.8
+white_belt/mirror_shift_2.py        10     0    0  0:01:53.623613       59.6
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.30it/s] 18%|█▊        | 2/11 [00:00<00:02,  3.32it/s]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.30it/s] 18%|█▊        | 2/11 [00:00<00:03,  2.81it/s] 18%|█▊        | 2/11 [00:00<00:02,  3.18it/s]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  0%|          | 0/11 [00:00<?, ?it/s]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.26it/s] 18%|█▊        | 2/11 [00:00<00:02,  3.15it/s]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.33it/s]  9%|▉         | 1/11 [00:00<00:05,  1.86it/s]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.29it/s] 18%|█▊        | 2/11 [00:00<00:02,  3.05it/s]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.33it/s] 18%|█▊        | 2/11 [00:10<00:47,  5.23s/it]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:05,  1.91it/s] 18%|█▊        | 2/11 [00:00<00:03,  2.48it/s] 27%|██▋       | 3/11 [01:29<03:35, 26.96s/it] 27%|██▋       | 3/11 [01:40<04:27, 33.46s/it]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, white_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:04,  2.17it/s] 20%|██        | 2/10 [00:00<00:02,  2.81it/s] 30%|███       | 3/10 [01:48<03:48, 32.68s/it] 60%|██████    | 6/10 [01:48<01:31, 22.89s/it] 70%|███████   | 7/10 [01:49<00:48, 16.32s/it] 80%|████████  | 8/10 [01:50<00:23, 11.69s/it]100%|██████████| 10/10 [01:50<00:00,  8.21s/it]100%|██████████| 10/10 [01:50<00:00, 11.09s/it]
+                                  wins loses ties      total time avg. score
+white_belt/mirror_shift_1.py        10     0    0  0:01:48.687050       49.2
+white_belt/counter_reactionary.py    6     1    3  0:01:48.848432       18.3
+white_belt/all_scissors.py          10     0    0  0:01:50.721674       62.5
+white_belt/__pycache__              10     0    0  0:00:00.463817          1
+white_belt/all_rock.py               9     0    1  0:01:50.714147       33.1
+white_belt/statistical.py           10     0    0  0:01:49.815136       53.4
+white_belt/mirror.py                 9     0    1  0:01:48.708679       49.8
+white_belt/de_bruijn.py             10     0    0  0:00:00.577828          1
+white_belt/all_paper.py              9     0    1  0:01:50.909333       43.2
+white_belt/mirror_shift_2.py        10     0    0  0:01:48.713591       48.3
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:00<00:03,  2.33it/s] 30%|███       | 3/10 [01:47<01:54, 16.42s/it] 40%|████      | 4/10 [01:48<01:09, 11.58s/it] 50%|█████     | 5/10 [01:48<00:40,  8.14s/it] 60%|██████    | 6/10 [01:48<00:23,  5.78s/it] 70%|███████   | 7/10 [01:49<00:13,  4.41s/it] 80%|████████  | 8/10 [01:49<00:06,  3.13s/it] 90%|█████████ | 9/10 [01:50<00:02,  2.24s/it]100%|██████████| 10/10 [01:50<00:00,  1.61s/it]100%|██████████| 10/10 [01:50<00:00, 11.03s/it]
+                                  wins loses ties      total time avg. score
+white_belt/mirror_shift_1.py        10     0    0  0:01:48.198319      421.5
+white_belt/counter_reactionary.py    9     0    1  0:01:47.917749      282.1
+white_belt/all_scissors.py          10     0    0  0:01:50.113824      987.1
+white_belt/__pycache__              10     0    0  0:00:00.438022          1
+white_belt/all_rock.py              10     0    0  0:01:49.937867      171.7
+white_belt/statistical.py           10     0    0  0:01:48.326076        136
+white_belt/mirror.py                10     0    0  0:01:48.574370        938
+white_belt/de_bruijn.py             10     0    0  0:00:00.431066          1
+white_belt/all_paper.py             10     0    0  0:01:49.790251      172.6
+white_belt/mirror_shift_2.py        10     0    0  0:01:50.255966      917.3
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.16it/s] 27%|██▋       | 3/11 [01:28<01:48, 13.60s/it] 36%|███▋      | 4/11 [01:50<01:51, 15.87s/it] 45%|████▌     | 5/11 [01:50<01:06, 11.14s/it] 55%|█████▍    | 6/11 [01:50<00:39,  7.87s/it] 64%|██████▎   | 7/11 [01:50<00:22,  5.56s/it] 73%|███████▎  | 8/11 [01:51<00:12,  4.20s/it] 91%|█████████ | 10/11 [01:51<00:02,  2.97s/it]100%|██████████| 11/11 [01:52<00:00,  2.11s/it]100%|██████████| 11/11 [01:52<00:00, 10.18s/it]
+                                  wins loses ties      total time avg. score
+white_belt/mirror_shift_1.py        10     0    0  0:01:50.149101      338.1
+white_belt/counter_reactionary.py    8     0    2  0:01:50.254607      287.6
+white_belt/all_scissors.py          10     0    0  0:01:51.687545      988.8
+white_belt/__pycache__              10     0    0  0:00:00.467044          1
+white_belt/all_rock.py              10     0    0  0:01:52.014883      143.3
+white_belt/statistical.py           10     0    0  0:01:50.662760        124
+white_belt/mirror.py                10     0    0  0:01:50.507608      934.7
+white_belt/de_bruijn.py             10     0    0  0:00:00.465783          1
+white_belt/all_paper.py             10     0    0  0:01:51.676696      171.2
+white_belt/reactionary.py           10     0    0  0:01:28.993552      349.5
+white_belt/mirror_shift_2.py        10     0    0  0:01:51.898898      922.7
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/11 [00:00<?, ?it/s]  9%|▉         | 1/11 [00:00<00:04,  2.17it/s] 18%|█▊        | 2/11 [00:00<00:03,  2.69it/s] 27%|██▋       | 3/11 [01:30<03:37, 27.14s/it] 36%|███▋      | 4/11 [01:51<02:57, 25.42s/it] 45%|████▌     | 5/11 [01:51<01:47, 17.91s/it] 55%|█████▍    | 6/11 [01:52<01:03, 12.61s/it] 73%|███████▎  | 8/11 [01:53<00:26,  8.94s/it] 91%|█████████ | 10/11 [01:53<00:06,  6.30s/it]100%|██████████| 11/11 [01:53<00:00,  4.56s/it]100%|██████████| 11/11 [01:53<00:00, 10.35s/it]
+                                  wins loses ties      total time avg. score
+white_belt/mirror_shift_1.py        10     0    0  0:01:51.622038      598.9
+white_belt/counter_reactionary.py   10     0    0  0:01:52.002982      503.9
+white_belt/all_scissors.py          10     0    0  0:01:53.143476      987.8
+white_belt/__pycache__              10     0    0  0:00:00.465011          1
+white_belt/all_rock.py              10     0    0  0:01:53.314295      235.8
+white_belt/statistical.py           10     0    0  0:01:52.243148      179.7
+white_belt/mirror.py                10     0    0  0:01:52.322018      929.5
+white_belt/de_bruijn.py             10     0    0  0:00:00.626872          1
+white_belt/all_paper.py             10     0    0  0:01:53.046995      249.4
+white_belt/reactionary.py           10     0    0  0:01:30.232716      588.8
+white_belt/mirror_shift_2.py        10     0    0  0:01:53.801175      917.9
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/18 [00:00<?, ?it/s]  6%|▌         | 1/18 [00:00<00:11,  1.47it/s] 22%|██▏       | 4/18 [02:15<03:16, 14.01s/it] 28%|██▊       | 5/18 [02:20<02:23, 11.06s/it] 33%|███▎      | 6/18 [02:34<02:24, 12.03s/it] 39%|███▉      | 7/18 [02:45<02:07, 11.59s/it] 44%|████▍     | 8/18 [02:46<01:25,  8.54s/it] 50%|█████     | 9/18 [02:46<00:54,  6.05s/it] 56%|█████▌    | 10/18 [02:47<00:35,  4.39s/it] 61%|██████    | 11/18 [02:56<00:41,  5.95s/it] 67%|██████▋   | 12/18 [02:56<00:25,  4.19s/it] 72%|███████▏  | 13/18 [03:02<00:23,  4.70s/it] 78%|███████▊  | 14/18 [03:09<00:20,  5.20s/it] 83%|████████▎ | 15/18 [03:44<00:43, 14.39s/it] 89%|████████▉ | 16/18 [04:21<00:42, 21.08s/it] 94%|█████████▍| 17/18 [06:54<01:00, 60.66s/it]100%|██████████| 18/18 [11:28<00:00, 124.51s/it]100%|██████████| 18/18 [11:28<00:00, 38.23s/it] 
+                                          wins loses  ...      total time avg. score
+blue_belt/rfind.py                          10     0  ...  0:02:56.890819      418.6
+blue_belt/statistical_prediction.py         10     0  ...  0:00:00.715756          1
+blue_belt/stochastic_transition_matrix.py    1     3  ...  0:02:47.210250       -2.8
+blue_belt/xgboost.py                         4     4  ...  0:06:54.687836       -3.6
+blue_belt/not_so_markov.py                   7     0  ...  0:02:20.177802       26.5
+blue_belt/decision_tree.py                   3     1  ...  0:04:21.671764        7.9
+blue_belt/transition_matrix.py               2     5  ...  0:02:34.453496       -7.4
+black_belt/centrifugal_bumblepuppy_v4.py     4     1  ...  0:02:46.446163        6.6
+black_belt/__pycache__                      10     0  ...  0:00:00.682949          1
+black_belt/dllu1.py                          0     6  ...  0:03:02.783181      -28.6
+black_belt/greenberg.py                      6     0  ...  0:03:44.977755       25.3
+black_belt/iocane_powder.py                  1     1  ...  0:02:45.006843        0.7
+black_belt/multi_armed_bandit_v15.py        10     0  ...  0:00:00.731925          1
+black_belt/memory_patterns_v20.py            4     3  ...  0:03:09.152842        4.9
+black_belt/IOU2.py                           4     0  ...  0:02:56.782967       15.9
+black_belt/multi_armed_bandit_v32.py         3     4  ...  0:11:28.187518       -4.6
+black_belt/memory_patterns_v7.py             4     3  ...  0:02:15.982766          6
+black_belt/testing_please_ignore.py          2     2  ...  0:02:46.667715       -3.5
+
+[18 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/19 [00:00<?, ?it/s]  5%|▌         | 1/19 [00:01<00:24,  1.36s/it] 21%|██        | 4/19 [00:01<00:14,  1.03it/s] 26%|██▋       | 5/19 [07:33<31:48, 136.30s/it] 32%|███▏      | 6/19 [08:07<22:52, 105.58s/it] 37%|███▋      | 7/19 [08:10<14:59, 74.93s/it]  42%|████▏     | 8/19 [08:16<09:56, 54.25s/it] 47%|████▋     | 9/19 [08:19<06:27, 38.78s/it] 53%|█████▎    | 10/19 [08:27<04:26, 29.62s/it] 58%|█████▊    | 11/19 [08:31<02:54, 21.80s/it] 63%|██████▎   | 12/19 [08:32<01:49, 15.62s/it] 68%|██████▊   | 13/19 [08:46<01:30, 15.09s/it] 74%|███████▎  | 14/19 [09:13<01:33, 18.74s/it] 79%|███████▉  | 15/19 [09:27<01:09, 17.35s/it] 84%|████████▍ | 16/19 [09:30<00:38, 12.85s/it] 89%|████████▉ | 17/19 [09:51<00:30, 15.39s/it] 95%|█████████▍| 18/19 [12:12<00:53, 53.17s/it]100%|██████████| 19/19 [17:02<00:00, 123.96s/it]100%|██████████| 19/19 [17:02<00:00, 53.79s/it] 
+                                          wins loses  ...      total time avg. score
+blue_belt/rfind.py                          10     0  ...  0:08:46.541863      499.6
+blue_belt/statistical_prediction.py         10     0  ...  0:00:01.395732          1
+blue_belt/stochastic_transition_matrix.py    2     2  ...  0:08:16.995542        3.9
+blue_belt/xgboost.py                         3     1  ...  0:12:12.904555        8.9
+blue_belt/not_so_markov.py                   6     2  ...  0:08:07.564359       21.7
+blue_belt/__pycache__                       10     0  ...  0:00:01.384099          1
+blue_belt/decision_tree.py                   4     1  ...  0:09:27.908312        7.6
+blue_belt/transition_matrix.py               1     2  ...  0:07:33.681911       -2.7
+black_belt/centrifugal_bumblepuppy_v4.py     2     2  ...  0:08:10.979754       -0.5
+black_belt/__pycache__                      10     0  ...  0:00:01.357725          1
+black_belt/dllu1.py                          2     4  ...  0:08:32.680261       -6.3
+black_belt/greenberg.py                      4     0  ...  0:09:51.575576         13
+black_belt/iocane_powder.py                  3     2  ...  0:08:19.661805        5.4
+black_belt/multi_armed_bandit_v15.py        10     0  ...  0:00:01.606292          1
+black_belt/memory_patterns_v20.py            1     1  ...  0:08:31.470964        0.6
+black_belt/IOU2.py                           3     2  ...  0:09:30.258833        0.9
+black_belt/multi_armed_bandit_v32.py         0     3  ...  0:17:02.043928      -12.3
+black_belt/memory_patterns_v7.py             3     1  ...  0:08:27.926590        5.1
+black_belt/testing_please_ignore.py          3     1  ...  0:09:13.791098        5.6
+
+[19 rows x 5 columns]
