@@ -4,6 +4,8 @@ import sparring_partner.white_belt.counter_reactionary as counter_reactionary
 import sparring_partner.blue_belt.transition_matrix as transition_matrix
 import sparring_partner.black_belt.greenberg as greenberg
 import sparring_partner.black_belt.iocane_powder as iocane_powder
+import sparring_partner.black_belt.dllu1 as dllu1
+import sparring_partner.black_belt.IOU2 as IOU2
 import test_partner
 import matplotlib.pyplot as plt
 import ryan
@@ -73,7 +75,7 @@ class MockBattler():
 
 
 # #rps_agent
-mb = MockBattler(rps_agent, transition_matrix.transition_agent)
+mb = MockBattler(rps_agent, IOU2.agent)
 #counter_reactionary.counter_reactionary
 #transition_matrix.transition_agent
 mb.run()

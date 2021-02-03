@@ -1,4 +1,5 @@
 from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from scipy import stats as s
 import random
@@ -9,6 +10,13 @@ import secrets
 from xgboost import XGBClassifier
 import pandas as pd
 import time
+import collections
+import cmath
+from typing import List
+import traceback
+import sys
+import operator
+
 
 class Model():
     def __init__(self):
@@ -22,55 +30,343 @@ class Model():
         return self.tactic
 
 
-class Xgboost(Model):
+basis = np.array(
+    [1, cmath.exp(2j * cmath.pi * 1 / 3), cmath.exp(2j * cmath.pi * 2 / 3)]
+)
+
+
+HistMatchResult = collections.namedtuple("HistMatchResult", "idx length")
+
+
+def find_all_longest(seq, max_len=None) -> List[HistMatchResult]:
+    """
+    Find all indices where end of `seq` matches some past.
+    """
+    result = []
+
+    i_search_start = len(seq) - 2
+
+    while i_search_start > 0:
+        i_sub = -1
+        i_search = i_search_start
+        length = 0
+
+        while i_search >= 0 and seq[i_sub] == seq[i_search]:
+            length += 1
+            i_sub -= 1
+            i_search -= 1
+
+            if max_len is not None and length > max_len:
+                break
+
+        if length > 0:
+            result.append(HistMatchResult(i_search_start + 1, length))
+
+        i_search_start -= 1
+
+    result = sorted(result, key=operator.attrgetter("length"), reverse=True)
+
+    return result
+
+
+def probs_to_complex(p):
+    return p @ basis
+
+
+def _fix_probs(probs):
+    """
+    Put probs back into triangle. Sometimes this happens due to rounding errors or if you
+    use complex numbers which are outside the triangle.
+    """
+    if min(probs) < 0:
+        probs -= min(probs)
+
+    probs /= sum(probs)
+
+    return probs
+
+
+def complex_to_probs(z):
+    probs = (2 * (z * basis.conjugate()).real + 1) / 3
+    probs = _fix_probs(probs)
+    return probs
+
+
+def z_from_action(action):
+    return basis[action]
+
+
+def sample_from_z(z):
+    probs = complex_to_probs(z)
+    return np.random.choice(3, p=probs)
+
+
+def bound(z):
+    return probs_to_complex(complex_to_probs(z))
+
+
+def norm(z):
+    return bound(z / abs(z))
+
+
+class Pred:
+    def __init__(self, *, alpha):
+        self.offset = 0
+        self.alpha = alpha
+        self.last_feat = None
+
+    def train(self, target):
+        if self.last_feat is not None:
+            offset = target * self.last_feat.conjugate()   # fixed
+
+            self.offset = (1 - self.alpha) * self.offset + self.alpha * offset
+
+    def predict(self, feat):
+        """
+        feat is an arbitrary feature with a probability on 0,1,2
+        anything which could be useful anchor to start with some kind of sensible direction
+        """
+        feat = norm(feat)
+
+        # offset = mean(target - feat)
+        # so here we see something like: result = feat + mean(target - feat)
+        # which seems natural and accounts for the correlation between target and feat
+        # all RPSContest bots do no more than that as their first step, just in a different way
+
+        result = feat * self.offset
+
+        self.last_feat = feat
+
+        return result
+
+
+class BaseAgent:
     def __init__(self):
-        self.numTurnsPredictors = 5  # number of previous turns to use as predictors
-        self.minTrainSetRows = 10  # only start predicting moves after we have enough data
-        self.myLastMove = None
-        self.mySecondLastMove = None
-        self.opponentLastMove = None
-        self.numDummies = 2  # how many dummy vars we need to represent a move
-        self.predictors = pd.DataFrame(columns=[str(x) for x in range(
-            self.numTurnsPredictors * 2 * self.numDummies)]).astype("int")
-        self.opponentsMoves = [0] * 1000
-        self.roundHistory = [None] * 1000
-        self.dummies = [[[0, 0, 0, 0], [0, 1, 0, 0], [1, 0, 0, 0]], [[0, 0, 0, 1], [
-            0, 1, 0, 1], [1, 0, 0, 1]], [[0, 0, 1, 0], [0, 1, 1, 0], [1, 0, 1, 0]]]
-        self.clf = XGBClassifier(n_estimators=10)
+        self.my_hist = []
+        self.opp_hist = []
+        self.my_opp_hist = []
+        self.outcome_hist = []
+        self.step = None
 
-    def updateFeatures(self, rounds):
-        self.predictors.loc[len(self.predictors)] = sum(rounds, [])
+    def __call__(self, my_actions, op_actions, reward, step, configuration):
+        try:
+            self.step = step
 
-    def fitAndPredict(self, x, y, newX):
-        self.clf.fit(x.values, y)
-        return int(self.clf.predict(np.array(newX).reshape((1, -1)))[0])
+            opp = op_actions[-1]
+            my = my_actions[-1]
+
+            self.my_opp_hist.append((my, opp))
+            self.opp_hist.append(opp)
+
+            outcome = {0: 0, 1: 1, 2: -1}[(my - opp) % 3]
+            self.outcome_hist.append(outcome)
+
+            action = self.action()
+
+            self.my_hist.append(action)
+
+            return action
+        except Exception:
+            traceback.print_exc(file=sys.stderr)
+            raise
+
+    def action(self):
+        pass
+
+
+class Agent(BaseAgent):
+    def __init__(self, alpha=0.01):
+        super().__init__()
+
+        self.predictor = Pred(alpha=alpha)
+
+    def action(self):
+        self.train()
+
+        pred = self.preds()
+
+        return_action = sample_from_z(pred)
+
+        return return_action
+
+    def train(self):
+        last_beat_opp = z_from_action((self.opp_hist[-1] + 1) % 3)
+        self.predictor.train(last_beat_opp)
+
+    def preds(self):
+        hist_match = find_all_longest(self.my_opp_hist, max_len=20)
+
+        if not hist_match:
+            return 0
+
+        feat = z_from_action(self.opp_hist[hist_match[0].idx])
+
+        pred = self.predictor.predict(feat)
+
+        return pred
+
+
+class Geometry(Model):
+    def __init__(self, anti=False):
+        self.model = Agent()
+        self.anti = anti
 
     def train(self, my_actions, op_actions, reward, step, configuration):
+        if self.anti:
+            my_actions, op_actions = op_actions, my_actions
+        self.tactic = self.model(
+            my_actions, op_actions, reward, step, configuration)
+        if self.anti:
+            self.tactic = (self.tactic + 1) % 3
+
+    def action(self):
+        return int(self.tactic)
+
+
+class IOU2:
+    def __init__(self, anti=False):
+        self.num_predictor = 27
+        self.len_rfind = [20]
+        self.limit = [10, 20, 60]
+        self.beat = {"R": "P", "P": "S", "S": "R"}
+        self.not_lose = {"R": "PPR", "P": "SSP", "S": "RRS"}  # 50-50 chance
+        self.my_his = ""
+        self.your_his = ""
+        self.both_his = ""
+        self.list_predictor = [""]*self.num_predictor
+        self.length = 0
+        self.temp1 = {"PP": "1", "PR": "2", "PS": "3",
+                      "RP": "4", "RR": "5", "RS": "6",
+                      "SP": "7", "SR": "8", "SS": "9"}
+        self.temp2 = {"1": "PP", "2": "PR", "3": "PS",
+                      "4": "RP", "5": "RR", "6": "RS",
+                      "7": "SP", "8": "SR", "9": "SS"}
+        self.who_win = {"PP": 0, "PR": 1, "PS": -1,
+                        "RP": -1, "RR": 0, "RS": 1,
+                        "SP": 1, "SR": -1, "SS": 0}
+        self.score_predictor = [0]*self.num_predictor
+        self.output = random.choice("RPS")
+        self.predictors = [self.output]*self.num_predictor
+        self.anti = anti
+
+    def train(self, my_actions, op_actions, reward, step, configuration):
+        if self.anti:
+            my_actions, op_actions = op_actions, my_actions
+
         T = step
         A = op_actions[-1]
         S = configuration.signs
-        self.myLastMove = A
-        self.roundHistory[T-1] = self.dummies[self.myLastMove][A]
-        if T == 1:
-            self.myLastMove = secrets.randbelow(S)
-        else:
-            self.opponentsMoves[T-2] = A
-            if T > self.numTurnsPredictors:
-                self.updateFeatures(
-                    self.roundHistory[:T][-self.numTurnsPredictors - 1: -1])
 
-            if len(self.predictors) > self.minTrainSetRows:
-                # data to predict next move
-                predictX = sum(
-                    self.roundHistory[:T][-self.numTurnsPredictors:], [])
-                predictedMove = self.fitAndPredict(
-                    self.predictors, self.opponentsMoves[:T-1][(self.numTurnsPredictors-1):], predictX)
-                self.myLastMove = (predictedMove + 1) % S
+        to_char = ["R", "P", "S"]
+        from_char = {"R": 0, "P": 1, "S": 2}
+        if T == 0:
+            return from_char[self.output]
+        input = to_char[A]
+
+        if len(self.list_predictor[0]) < 5:
+            front = 0
+        else:
+            front = 1
+        for i in range(self.num_predictor):
+            if self.predictors[i] == input:
+                result = "1"
             else:
-                self.myLastMove = secrets.randbelow(S)
+                result = "0"
+            # only 5 rounds before
+            self.list_predictor[i] = self.list_predictor[i][front:5]+result
+        # history matching 1-6
+        self.my_his += self.output
+        self.your_his += input
+        self.both_his += self.temp1[input+self.output]
+        self.length += 1
+        for i in range(1):
+            len_size = min(self.length, self.len_rfind[i])
+            j = len_size
+            # self.both_his
+            while j >= 1 and not self.both_his[self.length-j:self.length] in self.both_his[0:self.length-1]:
+                j -= 1
+            if j >= 1:
+                k = self.both_his.rfind(
+                    self.both_his[self.length-j:self.length], 0, self.length-1)
+                self.predictors[0+6*i] = self.your_his[j+k]
+                self.predictors[1+6*i] = self.beat[self.my_his[j+k]]
+            else:
+                self.predictors[0+6*i] = random.choice("RPS")
+                self.predictors[1+6*i] = random.choice("RPS")
+            j = len_size
+            # self.your_his
+            while j >= 1 and not self.your_his[self.length-j:self.length] in self.your_his[0:self.length-1]:
+                j -= 1
+            if j >= 1:
+                k = self.your_his.rfind(
+                    self.your_his[self.length-j:self.length], 0, self.length-1)
+                self.predictors[2+6*i] = self.your_his[j+k]
+                self.predictors[3+6*i] = self.beat[self.my_his[j+k]]
+            else:
+                self.predictors[2+6*i] = random.choice("RPS")
+                self.predictors[3+6*i] = random.choice("RPS")
+            j = len_size
+            # self.my_his
+            while j >= 1 and not self.my_his[self.length-j:self.length] in self.my_his[0:self.length-1]:
+                j -= 1
+            if j >= 1:
+                k = self.my_his.rfind(
+                    self.my_his[self.length-j:self.length], 0, self.length-1)
+                self.predictors[4+6*i] = self.your_his[j+k]
+                self.predictors[5+6*i] = self.beat[self.my_his[j+k]]
+            else:
+                self.predictors[4+6*i] = random.choice("RPS")
+                self.predictors[5+6*i] = random.choice("RPS")
+
+        for i in range(3):
+            temp = ""
+            search = self.temp1[(self.output+input)]  # last round
+            for start in range(2, min(self.limit[i], self.length)):
+                if search == self.both_his[self.length-start]:
+                    temp += self.both_his[self.length-start+1]
+            if(temp == ""):
+                self.predictors[6+i] = random.choice("RPS")
+            else:
+                # take win/lose from opponent into account
+                collectR = {"P": 0, "R": 0, "S": 0}
+                for sdf in temp:
+                    next_move = self.temp2[sdf]
+                    if(self.who_win[next_move] == -1):
+                        collectR[self.temp2[sdf][1]] += 3
+                    elif(self.who_win[next_move] == 0):
+                        collectR[self.temp2[sdf][1]] += 1
+                    elif(self.who_win[next_move] == 1):
+                        collectR[self.beat[self.temp2[sdf][0]]] += 1
+                max1 = -1
+                p1 = ""
+                for key in collectR:
+                    if(collectR[key] > max1):
+                        max1 = collectR[key]
+                        p1 += key
+                self.predictors[6+i] = random.choice(p1)
+        for i in range(9, 27):
+            self.predictors[i] = self.beat[self.beat[self.predictors[i-9]]]
+        len_his = len(self.list_predictor[0])
+        for i in range(self.num_predictor):
+            sum = 0
+            for j in range(len_his):
+                if self.list_predictor[i][j] == "1":
+                    sum += (j+1)*(j+1)
+                else:
+                    sum -= (j+1)*(j+1)
+            self.score_predictor[i] = sum
+        max_score = max(self.score_predictor)
+        if max_score > 0:
+            predict = self.predictors[self.score_predictor.index(max_score)]
+        else:
+            predict = random.choice(self.your_his)
+        self.output = random.choice(self.not_lose[predict])
+        self.tactic = from_char[self.output]
+        if self.anti:
+            self.tactic = (self.tactic + 1) % 3
 
     def action(self):
-        return int(self.myLastMove)
+        return int(self.tactic)
 
 
 class PatternAggressive(Model):
@@ -169,10 +465,8 @@ class PatternAggressive(Model):
         return int(self.tactic)
 
 
-class NumpyPatterns:
-    K = 20
-
-    def __init__(self):
+class NumpyPatterns(Model):
+    def __init__(self, anti=False):
         self.tactic = 0
         # Jitter - steps before next non-random move
         self.Jmax = 2
@@ -190,6 +484,7 @@ class NumpyPatterns:
         self.R = 0.4
         self.RG = (1-self.R) * self.G
         self.Threshold = 0.4
+        self.anti = anti
 
         S = 3
         B, HL, DL, Dmin, Dmax = self.tactic, self.HL, self.DL, self.Dmin, self.Dmax
@@ -216,6 +511,8 @@ class NumpyPatterns:
         return d, h1, h2, idx
 
     def train(self, my_actions, op_actions, reward, step, configuration):
+        if self.anti:
+            my_actions, op_actions = op_actions, my_actions
         T = step
         A = op_actions[-1]
         S = configuration.signs
@@ -259,6 +556,8 @@ class NumpyPatterns:
                 self.J = self.Jmax - int(math.sqrt(secrets.randbelow(self.J2)))
                 # parts = self.split_idx(idx)
                 # print(T, f'{parts[0]+self.Dmin}: {self.HText[parts[1]]}-{self.HText[parts[2]]}+{parts[3]}', self.Scores[:, parts[1], parts[2], parts[0]], self.B)
+        if self.anti:
+            self.tactic = (self.tactic+1) % 3
 
     def action(self):
         return int(self.tactic)
@@ -301,6 +600,7 @@ class DecisionTreeModel(Model):
             y_train = y_train[-random_window_size:]
 
             # Train a classifier model
+            # model = RandomForestClassifier(n_estimators=25)
             model = DecisionTreeClassifier()
             model.fit(X_train, y_train)
 
@@ -325,13 +625,16 @@ class DecisionTreeModel(Model):
 
 
 class TransitionMatrix():
-    def __init__(self):
+    def __init__(self, anti=False):
         self.tactic = 0
         self.T = np.zeros((3, 3))
         self.P = np.zeros((3, 3))
         self.a1, self.a2 = None, None
+        self.anti = anti
 
     def train(self, my_actions, op_actions, reward, step, configuration):
+        if self.anti:
+            my_actions, op_actions = op_actions, my_actions
         self.a1 = op_actions[-1]
         self.T[self.a2, self.a1] += 1
         self.P = np.divide(self.T, np.maximum(
@@ -339,79 +642,79 @@ class TransitionMatrix():
         self.a2 = self.a1
         self.tactic = int(np.random.randint(3))
         if np.sum(self.P[self.a1, :]) == 1:
-            prediction = self.P[self.a1, :]
-            r, p, s = prediction[0], prediction[1], prediction[2]
-            self.tactic = int(np.argmax(np.array({s-p, r-s, p-r})))
-            # self.tactic = int((np.random.choice(
-            #     [0, 1, 2],
-            #     p=self.P[self.a1, :]
-            # ) + 1) % 3)
+            self.tactic = int((np.random.choice(
+                [0, 1, 2],
+                p=self.P[self.a1, :]
+            ) + 1) % 3)
+        if self.anti:
+            self.tactic = (self.tactic+1) % 3
 
     def action(self):
         return self.tactic
 
 
 class YapSapModel(Model):
-    def __init__(self, frequency=10):
-        self.strategy = "DT"
+    def __init__(self, frequency=0):
+        self.strategy = "IO"
         self.init_frequency = frequency
         self.frequency = frequency
         self.iteration = 0
         self.tactic = 0
         self.strategy_history = {
-            "TM": [], "DT": [], "MP": [], "PA": []}
+            "TM": [], "DT": [], "MP": [], "PA": [], "ATM": [], "AMP": [], "IO": [], "AIO": [], "GEO": [], "AGEO": []}
         self.strategy_score = {"TM": [], "DT": [],
-                               "MP": [], "PA": []}
+                               "MP": [], "PA": [], "ATM": [], "AMP": [], "IO": [], "AIO": [], "GEO": [], "AGEO": []}
         self.strategy_models = {"TM": TransitionMatrix(
-        ), "DT": DecisionTreeModel(), "MP": NumpyPatterns(), "PA": PatternAggressive()}
+        ), "DT": DecisionTreeModel(), "MP": NumpyPatterns(), "PA": PatternAggressive(), "ATM": TransitionMatrix(anti=True),
+            "AMP": NumpyPatterns(anti=True), "IO": IOU2(), "AIO": IOU2(anti=True), "GEO": Geometry(), "AGEO": Geometry(anti=True)}
 
     def _get_zone(self, reward, step):
-        if step < 900:
-            if reward <= -20:
-                return "Severe"
-            if reward <= -15:
-                return "Very Dangerous"
-            elif reward <= -10:
-                return "Dangerous"
-            elif reward <= 10:
-                return "Ok"
-            elif reward <= 15:
-                return "Try Harder"
-            elif reward < 20:
-                return "Almost There"
-            elif reward <= 30:
-                return "Pretty Good"
-            else:
-                return "Relax"
+        # if step < 900:
+        # if reward <= -20:
+        #     return "Severe"
+        # if reward <= -15:
+        #     return "Very Dangerous"
+        # elif reward <= -10:
+        #     return "Dangerous"
+        if reward <= -20 and step < 900:
+            return "Severe"
+        elif reward < 20:
+            return "Ok"
+        elif reward <= 30:
+            return "Pretty Good"
         else:
-            if reward <= -20:
-                return "Severe"
-            if reward <= -15:
-                return "Very Dangerous"
-            elif reward <= -10:
-                return "Dangerous"
-            elif reward <= 0:
-                return "Try Harder"
-            elif reward <= 15:
-                return "Almost There"
-            elif reward < 20:
-                return "Almost There"
-            elif reward <= 30:
-                return "Pretty Good"
-            else:
-                return "Relax"
+            return "Relax"
+        # else:
+        #     if reward <= -20:
+        #         return "Severe"
+        #     if reward <= -15:
+        #         return "Very Dangerous"
+        #     elif reward <= -10:
+        #         return "Dangerous"
+        #     elif reward <= 0:
+        #         return "Try Harder"
+        #     elif reward <= 15:
+        #         return "Almost There"
+        #     elif reward < 20:
+        #         return "Almost There"
+        #     elif reward <= 30:
+        #         return "Pretty Good"
+        #     else:
+        #         return "Relax"
 
     def _update_frequency(self, reward, step):
         zone = self._get_zone(reward, step)
-        # print(zone)
-        if zone in ["Severe", "Almost There"]:
-            self.frequency = self.init_frequency - random.randint(7, 9)
-        elif zone in ["Very Dangerous", "Dangerous", "Try Harder"]:
-            self.frequency = self.init_frequency - random.randint(4, 6)
-        elif zone in ["Ok"]:
-            self.frequency = self.init_frequency
-        elif zone in ["Pretty Good", "Relax"]:
-            self.frequency = self.init_frequency + random.randint(7, 9)
+        # # print(zone)
+        if zone in ["Severe"]:
+            self.frequency = self.init_frequency - random.randint(5, 7)
+        # elif zone in ["Very Dangerous", "Dangerous", "Try Harder"]:
+        #     self.frequency = self.init_frequency + random.randint(1, 2)
+        if zone in ["Ok"]:
+            self.frequency = self.init_frequency - random.randint(0, 1)
+        elif zone in ["Pretty Good"]:
+            self.frequency = self.init_frequency + random.randint(8, 10)
+        elif zone in ["Relax"]:
+            self.frequency = self.init_frequency + random.randint(13, 15)
 
     @staticmethod
     def _measure_performance(strategy_history, op_actions):
@@ -436,29 +739,32 @@ class YapSapModel(Model):
             return
         for strategy in self.strategy_history.keys():
             self.strategy_score[strategy] = self._measure_performance(
-                self.strategy_history[strategy][-10:], op_actions[1:][-10:])
-            # print(strategy, self.strategy_score[strategy])
-            self.strategy_history[strategy] = self.strategy_history[strategy][-10:]
+                self.strategy_history[strategy][-10:], op_actions[-10:])
+
+            print(strategy, self.strategy_score[strategy])
 
         self.strategy = max(self.strategy_score, key=self.strategy_score.get)
+        # print(strategy, self.strategy_score[self.strategy])
 
         if self.strategy is not None:
             if self.strategy_score[self.strategy] < 0.2 and step < 900:
                 self.strategy = None
             elif self.strategy_score[self.strategy] > 0.7:
                 # More aggressive
-                self.frequency = self.init_frequency - random.randint(7, 9)
+                self.frequency = self.init_frequency - random.randint(3, 5)
             elif self.strategy_score[self.strategy] > 0.9:
                 # More aggressive
                 self.frequency = 0
+            # else:
+            #     self.frequency = self.init_frequency
 
     def train(self, my_actions, op_actions, reward, step, configuration):
         import random
         random = random.SystemRandom()
 
         # Update strategy based on history
-        self._update_strategy(op_actions, step)
         self._update_frequency(reward, step)
+        self._update_strategy(op_actions, step)
 
         # Update models and record their predictions
         for strategy in self.strategy_models.keys():

@@ -561,3 +561,79 @@ black_belt/memory_patterns_v7.py             3     1  ...  0:08:27.926590       
 black_belt/testing_please_ignore.py          3     1  ...  0:09:13.791098        5.6
 
 [19 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/19 [00:00<?, ?it/s]  5%|▌         | 1/19 [00:00<00:17,  1.03it/s] 11%|█         | 2/19 [00:01<00:13,  1.24it/s] 21%|██        | 4/19 [00:01<00:08,  1.71it/s] 26%|██▋       | 5/19 [02:42<11:21, 48.70s/it] 32%|███▏      | 6/19 [02:55<08:12, 37.86s/it] 37%|███▋      | 7/19 [02:57<05:28, 27.37s/it] 42%|████▏     | 8/19 [03:10<04:11, 22.89s/it] 47%|████▋     | 9/19 [03:15<02:54, 17.47s/it] 53%|█████▎    | 10/19 [03:16<01:52, 12.51s/it] 58%|█████▊    | 11/19 [03:23<01:28, 11.11s/it] 63%|██████▎   | 12/19 [03:38<01:25, 12.27s/it] 68%|██████▊   | 13/19 [03:42<00:58,  9.77s/it] 74%|███████▎  | 14/19 [03:46<00:40,  8.04s/it] 79%|███████▉  | 15/19 [03:51<00:28,  7.09s/it] 84%|████████▍ | 16/19 [04:40<00:58, 19.48s/it] 89%|████████▉ | 17/19 [04:49<00:32, 16.32s/it] 95%|█████████▍| 18/19 [07:25<00:58, 58.22s/it] 95%|█████████▍| 18/19 [07:26<00:24, 24.79s/it]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "sparring_partner.py", line 58, in <module>
+    df = eval_agent_against_baselines(my_agent, blue_belt_agents + black_belt_agents)
+  File "sparring_partner.py", line 39, in eval_agent_against_baselines
+    for content in tqdm(pool.imap_unordered(get_result, matches), total=len(matches)):
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/site-packages/tqdm/std.py", line 1171, in __iter__
+    for obj in iterable:
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 748, in next
+    raise value
+  File "/home/hobbs/anaconda3/envs/dk/lib/python3.7/multiprocessing/pool.py", line 121, in worker
+    result = (True, func(*args, **kwds))
+  File "sparring_partner.py", line 18, in get_result
+    if score > 0: won += 1
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/19 [00:00<?, ?it/s]  5%|▌         | 1/19 [00:01<00:24,  1.39s/it] 21%|██        | 4/19 [00:01<00:14,  1.01it/s] 26%|██▋       | 5/19 [02:35<10:54, 46.73s/it] 32%|███▏      | 6/19 [02:35<07:06, 32.78s/it] 37%|███▋      | 7/19 [02:40<04:52, 24.40s/it] 42%|████▏     | 8/19 [03:07<04:38, 25.27s/it] 47%|████▋     | 9/19 [03:12<03:12, 19.29s/it] 53%|█████▎    | 10/19 [03:15<02:07, 14.20s/it] 58%|█████▊    | 11/19 [03:16<01:22, 10.28s/it] 63%|██████▎   | 12/19 [03:22<01:02,  8.95s/it] 68%|██████▊   | 13/19 [03:28<00:49,  8.22s/it] 74%|███████▎  | 14/19 [03:31<00:32,  6.49s/it] 79%|███████▉  | 15/19 [04:01<00:54, 13.72s/it] 84%|████████▍ | 16/19 [04:29<00:54, 18.09s/it] 89%|████████▉ | 17/19 [04:42<00:33, 16.57s/it] 95%|█████████▍| 18/19 [07:35<01:03, 63.43s/it]100%|██████████| 19/19 [12:24<00:00, 130.97s/it]100%|██████████| 19/19 [12:24<00:00, 39.17s/it] 
+                                          wins loses  ...      total time avg. score
+blue_belt/rfind.py                          10     0  ...  0:03:28.548935      168.4
+blue_belt/statistical_prediction.py         10     0  ...  0:00:01.411641          1
+blue_belt/stochastic_transition_matrix.py    5     2  ...  0:02:35.004278       11.3
+blue_belt/xgboost.py                         5     2  ...  0:07:35.685578       12.4
+blue_belt/not_so_markov.py                   6     1  ...  0:03:16.173745       23.2
+blue_belt/__pycache__                       10     0  ...  0:00:01.406390          1
+blue_belt/decision_tree.py                   2     0  ...  0:04:42.891472        5.2
+blue_belt/transition_matrix.py               2     2  ...  0:03:12.720783       -1.3
+black_belt/centrifugal_bumblepuppy_v4.py     5     2  ...  0:03:15.041818       19.3
+black_belt/__pycache__                      10     0  ...  0:00:01.388568          1
+black_belt/dllu1.py                          3     1  ...  0:03:31.004290        7.5
+black_belt/greenberg.py                      5     2  ...  0:04:29.885997       13.4
+black_belt/iocane_powder.py                  1     2  ...  0:04:01.598862       -1.7
+black_belt/multi_armed_bandit_v15.py        10     0  ...  0:00:01.540346          1
+black_belt/memory_patterns_v20.py            2     1  ...  0:03:07.391488        7.3
+black_belt/IOU2.py                           0     3  ...  0:03:22.008568      -11.3
+black_belt/multi_armed_bandit_v32.py         2     2  ...  0:12:24.221828        1.5
+black_belt/memory_patterns_v7.py             3     0  ...  0:02:40.064722         12
+black_belt/testing_please_ignore.py          3     0  ...  0:02:35.236435        7.8
+
+[19 rows x 5 columns]
+Loading environment football failed: No module named 'gfootball'
+  0%|          | 0/19 [00:00<?, ?it/s]  5%|▌         | 1/19 [00:01<00:25,  1.42s/it] 21%|██        | 4/19 [00:01<00:15,  1.01s/it] 26%|██▋       | 5/19 [03:06<13:08, 56.31s/it] 32%|███▏      | 6/19 [03:13<08:59, 41.50s/it] 37%|███▋      | 7/19 [03:23<06:21, 31.81s/it] 42%|████▏     | 8/19 [03:24<04:10, 22.74s/it] 47%|████▋     | 9/19 [03:25<02:42, 16.29s/it] 53%|█████▎    | 10/19 [03:31<01:57, 13.02s/it] 58%|█████▊    | 11/19 [03:33<01:17,  9.67s/it] 63%|██████▎   | 12/19 [03:51<01:26, 12.34s/it] 68%|██████▊   | 13/19 [03:58<01:03, 10.57s/it] 74%|███████▎  | 14/19 [04:07<00:50, 10.12s/it] 79%|███████▉  | 15/19 [04:17<00:41, 10.30s/it] 84%|████████▍ | 16/19 [04:53<00:53, 17.98s/it] 89%|████████▉ | 17/19 [04:54<00:25, 12.70s/it] 95%|█████████▍| 18/19 [07:52<01:02, 62.33s/it]100%|██████████| 19/19 [12:45<00:00, 131.49s/it]100%|██████████| 19/19 [12:45<00:00, 40.27s/it] 
+                                          wins loses  ...      total time avg. score
+blue_belt/rfind.py                          10     0  ...  0:03:58.142153      550.6
+blue_belt/statistical_prediction.py         10     0  ...  0:00:01.428642          1
+blue_belt/stochastic_transition_matrix.py    3     3  ...  0:04:07.201885       -1.6
+blue_belt/xgboost.py                         2     3  ...  0:07:52.351913         -8
+blue_belt/not_so_markov.py                   6     0  ...  0:03:51.678408       29.7
+blue_belt/__pycache__                       10     0  ...  0:00:01.417746          1
+blue_belt/decision_tree.py                   2     3  ...  0:04:53.817045       -2.2
+blue_belt/transition_matrix.py               3     0  ...  0:03:23.065390          8
+black_belt/centrifugal_bumblepuppy_v4.py     0     4  ...  0:03:24.627185      -11.7
+black_belt/__pycache__                      10     0  ...  0:00:01.479282          1
+black_belt/dllu1.py                          0     1  ...  0:03:13.868393       -3.2
+black_belt/greenberg.py                      3     2  ...  0:04:54.196327        0.6
+black_belt/iocane_powder.py                  2     1  ...  0:03:31.276984        3.8
+black_belt/multi_armed_bandit_v15.py        10     0  ...  0:00:01.564895          1
+black_belt/memory_patterns_v20.py            4     2  ...  0:04:17.934687        4.8
+black_belt/IOU2.py                           1     1  ...  0:03:06.906210       -1.2
+black_belt/multi_armed_bandit_v32.py         4     2  ...  0:12:45.207835       11.8
+black_belt/memory_patterns_v7.py             2     3  ...  0:03:25.882894       -1.5
+black_belt/testing_please_ignore.py          0     1  ...  0:03:33.118944       -2.9
+
+[19 rows x 5 columns]
