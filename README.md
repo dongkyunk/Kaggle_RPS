@@ -13,4 +13,15 @@ The agents used are :
 - "DT": Decision Tree 
 - "MP": Memory Patterns 
 
-It adds random actions as a noise to delude enemy predictions, and the amount of random actions in between agent actions are determined by the current score and step. The agent to use is chosen based on a weighted score of their recent predictions.
+It adds random actions as a noise to delude enemy predictions, and the amount of random actions in between agent actions are determined by the current score and step. 
+
+The agent to use is chosen based on a weighted score of their recent predictions.
+
+## TODO
+
+I started this competiton a few weeks before the deadline, and the agent has some room for improvement.
+
+Possible things to add are :
+- Better voting scheme among ensemble (currently it just uses the best scored model)
+- Enhanced strategy 
+- More models 
