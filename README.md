@@ -1,2 +1,2 @@
-# rps_kaggle_agent
+# Kaggle_RPS
 
