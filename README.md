@@ -1,6 +1,6 @@
 # Kaggle_RPS
 
-This agent has scored Top 8% (Bronze Medal) in the RPS competition.
+This agent has scored Top 8% (:3rd_place_medal:Bronze Medal) in the RPS competition.
 
 ## Key Concept
 
